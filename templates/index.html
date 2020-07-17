@@ -58,6 +58,8 @@
             </div>
             <button id="start_stream" class="form-control-dark" type="button" onclick="start_stream()">Start
                 stream</button>
+            <button id="end_stream" class="form-control-dark" type="button" onclick="end_stream()">End
+                stream</button>
             <div id="tag_menu">
                 <input id="tag_fix" class="form-control form-control-dark w-100" type="text" aria-label="Search">
                 <button type="button" class="btn-cancel" onclick="modify_tag()">Modify</button>
@@ -66,16 +68,6 @@
             <div
                 class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1 class="h2">Tweets</h1>
-                <!-- <div class="btn-toolbar mb-2 mb-md-0">
-                    <div class="btn-group mr-2">
-                        <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
-                        <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
-                    </div>
-                    <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
-                        <span data-feather="calendar"></span>
-                        This week
-                    </button>
-                </div> -->
             </div>
 
             <!-- <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas> -->
@@ -257,6 +249,41 @@
             document.getElementById("start_stream").style.display = "none";
         }
         tag_counter = tags_list.length;
+    }
+
+    function start_stream() {
+        document.getElementById("end_stream").style.display = "inline";
+        var tags = []
+        for (i = 1; i <= tag_counter; i++) {
+            var cur_tag = document.getElementById("tag_" + i).innerHTML;
+            tags.push(cur_tag);
+        }
+        console.log(tags);
+        // var movies = ["titanic", "aaa"]
+
+        $.ajax({
+            url: '/streaming',
+            type: 'POST',
+            data: JSON.stringify(tags),   // converts js value to JSON string
+            contentType: 'application/json',
+            dataType: 'json',
+        })
+            .done(function (result) {     // on success get the return object from server
+                console.log(result)     // do whatever with it. In this case see it in console
+            })
+    }
+
+    function end_stream() {
+        $.ajax({
+            url: '/end_streaming',
+            type: 'POST',
+            // data: JSON.stringify(tags),   // converts js value to JSON string
+            // contentType: 'application/json',
+            // dataType: 'json',
+        })
+            .done(function (result) {     // on success get the return object from server
+                console.log(result)     // do whatever with it. In this case see it in console
+            })
     }
 </script>
 {% endblock %}
