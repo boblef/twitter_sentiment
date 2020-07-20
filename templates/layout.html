@@ -39,15 +39,56 @@
 
         #start_stream,
         #end_stream,
-        #tag_menu {
+        #reload,
+        #tag_menu,
+        #results,
+        #info {
             display: none;
+        }
+
+        table.dataframe,
+        .dataframe th,
+        .dataframe td {
+            border: none;
+            border-bottom: 1px solid #C8C8C8;
+            border-collapse: collapse;
+            text-align: left;
+            padding: 10px;
+            margin-bottom: 40px;
+            font-size: 0.9em;
+        }
+
+        .male th {
+            background-color: #add8e6;
+            color: white;
+        }
+
+        .data th {
+            background-color: #77dd77;
+            color: white;
+        }
+
+        tr:nth-child(odd) {
+            background-color: #eee;
+        }
+
+        tr:nth-child(even) {
+            background-color: #fff;
+        }
+
+        tr:hover {
+            background-color: #ffff99;
+        }
+
+        #info {
+            font-size: 20px;
         }
     </style>
     <!-- Custom styles for this template -->
     <link href="dashboard.css" rel="stylesheet">
 </head>
 
-<body>
+<body onload="init_func()">
     {% block content %}
     {% endblock %}
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"
