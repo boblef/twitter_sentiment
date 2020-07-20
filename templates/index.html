@@ -6,11 +6,10 @@
         data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
-    <input id="get_tag" class="form-control form-control-dark w-100" type="text"
-        placeholder="Enter a hash tag or username" aria-label="Search">
+    <input id="get_tag" class="form-control form-control-dark w-100" type="text" placeholder="Enter a #hashtag"
+        aria-label="Search">
     <ul class="navbar-nav px-3">
         <li class="nav-item text-nowrap">
-            <!-- <a class="nav-link" href="#">Add a tag</a> -->
             <button class="form-control-dark" type="button" onclick="tag()">Add a tag</button>
         </li>
     </ul>
@@ -18,34 +17,37 @@
 
 <div class="container-fluid">
     <div class="row">
-        <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
-            <div class="sidebar-sticky pt-3">
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+            <div class="sidebar-sticky">
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">
+                        <br>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/">
                             <span data-feather="home"></span>
-                            Dashboard <span class="sr-only">(current)</span>
+                            TOP <span class="sr-only">(current)</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span data-feather="file"></span>
-                            Github
+                        <a class="nav-link" href="https://github.com/boblef/twitter_sentimental" target="_blank">
+                            Code on Github
                         </a>
                     </li>
-                </ul>
-
-                <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-                    <span>Saved reports</span>
-                    <a class="d-flex align-items-center text-muted" href="#" aria-label="Add a new report">
-                        <span data-feather="plus-circle"></span>
-                    </a>
-                </h6>
-                <ul class="nav flex-column mb-2">
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span data-feather="file-text"></span>
-                            Current month
+                        <a class="nav-link" href="https://www.linkedin.com/in/koheisuzuki" target="_blank">
+                            LinkedIn
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://boblef.github.io/" target="_blank">
+                            MySite
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://boblef.github.io/docs/koheisuzuki_resume2020_ML.pdf"
+                            target="_blank">
+                            Resume
                         </a>
                     </li>
                 </ul>
@@ -53,143 +55,65 @@
         </nav>
 
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
-            <div id="output_tags"
-                class="d-flex flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <div id="output_tags" class="d-flex flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
             </div>
             <button id="start_stream" class="form-control-dark" type="button" onclick="start_stream()">Start
                 stream</button>
             <button id="end_stream" class="form-control-dark" type="button" onclick="end_stream()">End
                 stream</button>
+            <form action="/" method="POST" enctype="multipart/form-data" id="reload">
+                <input type="submit" value="Reload" id="reload_button">
+            </form>
             <div id="tag_menu">
                 <input id="tag_fix" class="form-control form-control-dark w-100" type="text" aria-label="Search">
                 <button type="button" class="btn-cancel" onclick="modify_tag()">Modify</button>
                 <button type="button" class="btn-cancel" onclick="delete_tag()">Delete</button>
             </div>
-            <div
-                class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                <h1 class="h2">Tweets</h1>
+            <div id="results">
+                <div
+                    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">Tweets</h1>
+                </div>
+                {% for table in tables %}
+                {{ table|safe }}
+                {% endfor %}
             </div>
+            <div id="info">
+                <div
+                    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">About this project</h1>
+                </div>
+                <p>Twitter Sentiment Analysis is a project created by <a href="https://boblef.github.io/">Kohei
+                        Suzuki</a>, and it streams tweets based on hashtags that you entered in the top menu bar.
+                    Then, by using <a href="https://github.com/ProsusAI/finBERT">FinBert</a>, FinBERT is a pre-trained
+                    NLP model to analyze sentiment of financial text, we give a sentiment score to each tweet.<br>
 
-            <!-- <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas> -->
-            <div class="table-responsive">
-                <table class="table table-striped table-sm">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Date</th>
-                            <th>Tweet</th>
-                            <th>Author</th>
-                            <th>Tag</th>
-                            <th>Sentiment</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>1,001</td>
-                            <td>2020/July/15 00:00:00</td>
-                            <td>Japan is yeah.</td>
-                            <td>Abe</td>
-                            <td>#Japan</td>
-                            <td>positive (0.95)</td>
-                        </tr>
-                        <tr>
-                            <td>1,002</td>
-                            <td>2020/July/15 00:00:01</td>
-                            <td>USA is boo.</td>
-                            <td>Trump</td>
-                            <td>#USA</td>
-                            <td>negative (-0.95)</td>
-                        </tr>
-                        <tr>
-                            <td>1,002</td>
-                            <td>2020/July/15 00:00:01</td>
-                            <td>USA is boo.</td>
-                            <td>Trump</td>
-                            <td>#USA</td>
-                            <td>negative (-0.95)</td>
-                        </tr>
-                        <tr>
-                            <td>1,002</td>
-                            <td>2020/July/15 00:00:01</td>
-                            <td>USA is boo.</td>
-                            <td>Trump</td>
-                            <td>#USA</td>
-                            <td>negative (-0.95)</td>
-                        </tr>
-                        <tr>
-                            <td>1,002</td>
-                            <td>2020/July/15 00:00:01</td>
-                            <td>USA is boo.</td>
-                            <td>Trump</td>
-                            <td>#USA</td>
-                            <td>negative (-0.95)</td>
-                        </tr>
-                        <tr>
-                            <td>1,002</td>
-                            <td>2020/July/15 00:00:01</td>
-                            <td>USA is boo.</td>
-                            <td>Trump</td>
-                            <td>#USA</td>
-                            <td>negative (-0.95)</td>
-                        </tr>
-                        <tr>
-                            <td>1,002</td>
-                            <td>2020/July/15 00:00:01</td>
-                            <td>USA is boo.</td>
-                            <td>Trump</td>
-                            <td>#USA</td>
-                            <td>negative (-0.95)</td>
-                        </tr>
-                        <tr>
-                            <td>1,002</td>
-                            <td>2020/July/15 00:00:01</td>
-                            <td>USA is boo.</td>
-                            <td>Trump</td>
-                            <td>#USA</td>
-                            <td>negative (-0.95)</td>
-                        </tr>
-                        <tr>
-                            <td>1,002</td>
-                            <td>2020/July/15 00:00:01</td>
-                            <td>USA is boo.</td>
-                            <td>Trump</td>
-                            <td>#USA</td>
-                            <td>negative (-0.95)</td>
-                        </tr>
-                        <tr>
-                            <td>1,002</td>
-                            <td>2020/July/15 00:00:01</td>
-                            <td>USA is boo.</td>
-                            <td>Trump</td>
-                            <td>#USA</td>
-                            <td>negative (-0.95)</td>
-                        </tr>
-                        <tr>
-                            <td>1,002</td>
-                            <td>2020/July/15 00:00:01</td>
-                            <td>USA is boo.</td>
-                            <td>Trump</td>
-                            <td>#USA</td>
-                            <td>negative (-0.95)</td>
-                        </tr>
-                        <tr>
-                            <td>1,002</td>
-                            <td>2020/July/15 00:00:01</td>
-                            <td>USA is boo.</td>
-                            <td>Trump</td>
-                            <td>#USA</td>
-                            <td>negative (-0.95)</td>
-                        </tr>
-                        <tr>
-                            <td>1,002</td>
-                            <td>2020/July/15 00:00:01</td>
-                            <td>USA is boo.</td>
-                            <td>Trump</td>
-                            <td>#USA</td>
-                            <td>negative (-0.95)</td>
-                        </tr>
-                    </tbody>
-                </table>
+                    The functionalities being used in this project have potential to be applied to the Automated forex
+                    trading strategy which I have been working on as a personal project.
+                </p>
+                <h5>Skills</h5>
+                <ul>
+                    <li>Python:<br>
+                        Flask, Tweepy, PyTorch, Pandas
+                    </li>
+                    <li>Others: <br>
+                        CircleCI, Docker
+                    </li>
+                </ul>
+                <div
+                    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">How to use</h1>
+                </div>
+                <div class="intro_steps">
+                    <ol>
+                        <li>Enter hashtags that you want to stream on as many as you want. E.x. USA, Japan, JPY, USD...
+                        </li>
+                        You can easily modify and remove a tag by clicking the tag.
+                        <li>Once you have typed hashtags, click the "Start stream" button.</li>
+                        <li>You need to refresh the page to get recent tweets by clicking the "Refresh".</li>
+                        <li>When you want to finish the stream, please click the "End stream".</li>
+                    </ol>
+                </div>
             </div>
         </main>
     </div>
@@ -252,38 +176,80 @@
     }
 
     function start_stream() {
+        // When user click the start_streaming button
+        // Display the necessary tools
         document.getElementById("end_stream").style.display = "inline";
+        document.getElementById("reload").style.display = "inline";
+        document.getElementById("start_stream").style.display = "none";
+        document.getElementById("info").style.display = "none";
+        document.getElementById("results").style.display = "inline";
+
+        // Create a list with hashtags that the user just typed
         var tags = []
         for (i = 1; i <= tag_counter; i++) {
             var cur_tag = document.getElementById("tag_" + i).innerHTML;
             tags.push(cur_tag);
         }
         console.log(tags);
-        // var movies = ["titanic", "aaa"]
 
+        // Send the hashtags to Flask
         $.ajax({
-            url: '/streaming',
+            url: '/start_streaming',
             type: 'POST',
             data: JSON.stringify(tags),   // converts js value to JSON string
             contentType: 'application/json',
             dataType: 'json',
+        }).done(function (result) {     // on success get the return object from server
+            console.log(result)     // do whatever with it. In this case see it in console
+        })
+
+        document.getElementById("reload_button").click();
+    }
+
+    function end_stream() {
+        // When uset click the end_streaming button
+        // Displat the necessary tools
+        document.getElementById("start_stream").style.display = "none";
+        document.getElementById("reload").style.display = "none";
+        document.getElementById("end_stream").style.display = "none";
+
+        // Remove the hashtags being displayed
+        let parent = document.getElementById('output_tags');
+        for (i = 1; i <= tag_counter; i++) {
+            let child = document.getElementById('tag_' + i);
+            parent.removeChild(child);
+        }
+        $.ajax({
+            url: '/end_streaming',
+            type: 'POST',
         })
             .done(function (result) {     // on success get the return object from server
                 console.log(result)     // do whatever with it. In this case see it in console
             })
     }
 
-    function end_stream() {
-        $.ajax({
-            url: '/end_streaming',
-            type: 'POST',
-            // data: JSON.stringify(tags),   // converts js value to JSON string
-            // contentType: 'application/json',
-            // dataType: 'json',
-        })
-            .done(function (result) {     // on success get the return object from server
-                console.log(result)     // do whatever with it. In this case see it in console
-            })
+    function init_func() {
+        // When user click the reload button
+        if ("{{ reload_status }}" == "True") {
+            // Display the neccessary tools.
+            document.getElementById("end_stream").style.display = "inline";
+            document.getElementById("reload").style.display = "inline";
+            document.getElementById("results").style.display = "inline";
+
+            // Parse hashtags that are supporsed to be displayed 
+            var tags = JSON.parse('{{ tags | tojson | safe}}');
+
+            // Display parsed tags in proper place
+            for (i = 1; i <= tags.length; i++) {
+                var output_tags = document.getElementById('output_tags');
+                // Create an HTML tag in which we will desplay tag which is just added by the user
+                output_tags.insertAdjacentHTML('beforeend', '<p class="tags" id=tag_' + i + ' onclick="tag_menu(this.id)">' + tags[i - 1] + '</p>');
+            }
+            // Set tag_counter
+            tag_counter = tags.length;
+        } else {
+            document.getElementById("info").style.display = "inline";
+        }
     }
 </script>
 {% endblock %}
