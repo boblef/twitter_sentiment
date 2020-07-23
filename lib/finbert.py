@@ -694,13 +694,15 @@ def predict(text, model):
             logits = softmax(np.array(logits))
             # logits = [logit for logit in logits]
             print("logits after softmax: ", logits)
-            sentiment_score = pd.Series(logits[:, 0] - logits[:, 1])[0]
-            # sentiment_score = logits[0] - logits[1]
+            mean_logit = np.mean(logits, axis=0)
+            print("Mean logit: ", mean_logit)
+            # sentiment_score = pd.Series(logits[:, 0] - logits[:, 1])[0]
+            sentiment_score = mean_logit[0] - mean_logit[1]
             print("sentiment_score: ", sentiment_score)
-            predictions = np.squeeze(np.argmax(logits, axis=1))
+            predictions = np.argmax(mean_logit, axis=0)
             print("predictions: ", predictions)
-            logits = [logit for logit in logits[0]]
-            batch_result = {'logit': logits,
+            # logits = [logit for logit in logits]
+            batch_result = {'logit': list(mean_logit),
                             'prediction': label_dict[int(predictions)],
                             'sentiment_score': sentiment_score}
             print(batch_result)
