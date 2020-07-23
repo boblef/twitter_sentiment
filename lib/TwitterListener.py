@@ -49,7 +49,14 @@ class TweetsListener(StreamListener):
         # by checking user verified and followers count
         if user_verified and followers_count > self.followers_threshold:
 
-            text = raw_data["text"]
+            # Try to get full text if there are more than 140 chars.
+            try:
+                text = raw_data["extended_tweet"]["full_text"]
+                print("Full Text: ", text)
+            except AttributeError:
+                text = raw_data["text"]
+                print("Not Full Text: ", text)
+
             created_at = raw_data["created_at"]
             user_id = raw_data["user"]["id"]
             related_tags = [tag for tag in self.tags if tag in text]
@@ -69,7 +76,7 @@ class TweetsListener(StreamListener):
                 writer = csv.DictWriter(f, self.csv_headers)
                 writer.writerow(data)
         else:  # When a csv hasnt been created yet
-            with open(self.export_csv_path, 'w') as f:
+            with open(self.export_csv_path, 'w', newline='') as f:
                 writer = csv.DictWriter(f, self.csv_headers)
                 writer.writeheader()
                 writer.writerow(data)
@@ -88,14 +95,22 @@ class TweetsListener(StreamListener):
             return False
 
     def on_status(self, status):
-        print(status.text)
+        pass
 
     def if_error(self, status):
         print(status)
         return True
 
     def set_tags(self, tags):
-        self.tags = tags
+        self.tags = self.add_tags(tags)
+
+    def add_tags(self, tags):
+        """
+        Add more tags related to the given tags such as small letters of them
+        """
+        lower_tags = [tag.lower() for tag in tags]
+        tags += lower_tags
+        return tags
 
     def get_tags(self):
         return self.tags
