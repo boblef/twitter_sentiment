@@ -32,7 +32,6 @@ class TweetsListener(StreamListener):
         if processed_data is not None:  # When the data is trustable
             print(processed_data)
             prediction_result = self.get_prediction(processed_data["text"])
-            print("Inside Lisner, predicted result: ", prediction_result)
             processed_data.update(prediction_result)
             self.write_csv(processed_data)
         return processed_data
@@ -51,7 +50,7 @@ class TweetsListener(StreamListener):
 
             # Try to get full text if there are more than 140 chars.
             try:
-                text = raw_data["extended_tweet"]["full_text"]
+                text = raw_data.extended_tweet["full_text"]
                 print("Full Text: ", text)
             except AttributeError:
                 text = raw_data["text"]
