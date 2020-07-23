@@ -18,7 +18,7 @@ API_KEY = config_ini['TWITTER']['API_KEY']
 API_SECRET_KEY = config_ini['TWITTER']['API_SECRET_KEY']
 ACCESS_TOKEN = config_ini['TWITTER']['ACCESS_TOKEN']
 ACCESS_TOKEN_SECRET = config_ini['TWITTER']['ACCESS_TOKEN_SECRET']
-FINBERT_MODEL_PATH = "models/sentiment/fin_phrasebank"
+FINBERT_MODEL_PATH = "model/sentiment/finbert"
 
 # CSV files
 EXPORT_CSV_PATH = "output.csv"  # Where we store tweets collected
