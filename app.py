@@ -62,12 +62,12 @@ def start_streaming():
     if request.method == "POST":
         data = request.json
         listener.set_tags(data)  # Set hashtags given by the user.
-
+        tags = listener.get_tags()  # Get preprocessed hashtags
         # Start streaming tweets based on the hashtags given.
-        stream.start(keyword_list=data,
+        stream.start(keyword_list=tags,
                      language_list=['en'],
                      follow_list=[],
-                     async_status=False)
+                     async_status=True)
         return 'OK'
 
 
