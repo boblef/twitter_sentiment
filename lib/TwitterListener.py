@@ -1,4 +1,5 @@
 from tweepy import StreamListener
+from lib.finbert import predict
 import json
 import csv
 from os import path
@@ -6,11 +7,14 @@ from os import path
 
 class TweetsListener(StreamListener):
 
-    def __init__(self, export_csv_path, followers_threshold):
+    def __init__(self, export_csv_path, followers_threshold, model):
         self.export_csv_path = export_csv_path
         self.followers_threshold = followers_threshold
         self.csv_headers = ["created_at", "text",
-                            "related_tags", "user_id", "followers_count"]
+                            "related_tags", "user_id",
+                            "followers_count", "logit",
+                            "prediction", "sentiment_score"]
+        self.model = model
 
     def on_connect(self):
         """Called once connected to streaming server.
@@ -27,6 +31,9 @@ class TweetsListener(StreamListener):
 
         if processed_data is not None:  # When the data is trustable
             print(processed_data)
+            prediction_result = self.get_prediction(processed_data["text"])
+            print("Inside Lisner, predicted result: ", prediction_result)
+            processed_data.update(prediction_result)
             self.write_csv(processed_data)
         return processed_data
 
@@ -58,7 +65,7 @@ class TweetsListener(StreamListener):
     def write_csv(self, data):
         """Add a row to a csv"""
         if path.exists(self.export_csv_path):  # there is already a csv file
-            with open(self.export_csv_path, 'a') as f:
+            with open(self.export_csv_path, 'a', newline='') as f:
                 writer = csv.DictWriter(f, self.csv_headers)
                 writer.writerow(data)
         else:  # When a csv hasnt been created yet
@@ -66,6 +73,15 @@ class TweetsListener(StreamListener):
                 writer = csv.DictWriter(f, self.csv_headers)
                 writer.writeheader()
                 writer.writerow(data)
+
+    def get_prediction(self, text):
+        """
+        Return
+        batch_result = {'logit': list(logits),
+                        'prediction': predictions,
+                        'sentiment_score': sentiment_score}
+        """
+        return predict(text, self.model)
 
     def on_error(self, status_code):
         if status_code == 420:
