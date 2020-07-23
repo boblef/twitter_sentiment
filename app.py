@@ -1,20 +1,24 @@
 from flask import (
-    Flask, render_template, request, stream_with_context, Response, redirect)
+    Flask, render_template, request)
 from lib.TwitterListener import TweetsListener
 from lib.Streaming import Streaming
 import configparser
 import tweepy as tw
-import json
 import pandas as pd
+from pytorch_pretrained_bert.modeling import BertForSequenceClassification
+import nltk
+nltk.download('punkt')
 
 app = Flask(__name__)
 
+# Setup config
 config_ini = configparser.ConfigParser()
 config_ini.read('config/twitter.txt', encoding='utf-8')
 API_KEY = config_ini['TWITTER']['API_KEY']
 API_SECRET_KEY = config_ini['TWITTER']['API_SECRET_KEY']
 ACCESS_TOKEN = config_ini['TWITTER']['ACCESS_TOKEN']
 ACCESS_TOKEN_SECRET = config_ini['TWITTER']['ACCESS_TOKEN_SECRET']
+FINBERT_MODEL_PATH = "models/sentiment/fin_phrasebank"
 
 # CSV files
 EXPORT_CSV_PATH = "output.csv"  # Where we store tweets collected
@@ -30,7 +34,9 @@ auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
 api = tw.API(auth, wait_on_rate_limit=True)
 
 # Declare classes we will be using
-listener = TweetsListener(EXPORT_CSV_PATH, FOLLOWERS_THRESHOLD)
+model = BertForSequenceClassification.from_pretrained(
+    FINBERT_MODEL_PATH, num_labels=3, cache_dir=None)
+listener = TweetsListener(EXPORT_CSV_PATH, FOLLOWERS_THRESHOLD, model)
 stream = Streaming(auth, listener)
 
 
