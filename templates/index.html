@@ -215,16 +215,10 @@
     function end_stream() {
         // When uset click the end_streaming button
         // Displat the necessary tools
-        document.getElementById("start_stream").style.display = "none";
+        document.getElementById("start_stream").style.display = "inline";
         document.getElementById("reload").style.display = "none";
         document.getElementById("end_stream").style.display = "none";
 
-        // Remove the hashtags being displayed
-        let parent = document.getElementById('output_tags');
-        for (i = 1; i <= tag_counter; i++) {
-            let child = document.getElementById('tag_' + i);
-            parent.removeChild(child);
-        }
         $.ajax({
             url: '/end_streaming',
             type: 'POST',
