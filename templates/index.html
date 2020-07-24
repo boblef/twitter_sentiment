@@ -58,6 +58,13 @@
             <div class="container">
                 <div id="output_tags" class="d-flex flex-wrap align-items-center pt-3 pb-2 mb-3">
                 </div>
+                <div class="row" id="acceptance_criteria">
+                    Follower count threshold (a positive integer): <input type="text" value="1000"
+                        id="fc_threshold"><br>
+                    Only accept tweets of users who have varified their twitter account: <input type="radio"
+                        value="True" name="verification" checked><br>
+                    Accept tweets of all users:<input type="radio" value="False" name="verification"><br><br>
+                </div>
             </div>
             <button id="start_stream" class="form-control-dark" type="button" onclick="start_stream()">Start
                 stream</button>
@@ -84,7 +91,7 @@
             </div>
             <div id="info">
                 <div
-                    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-top">
                     <h1 class="h2">About this project</h1>
                 </div>
                 <p>Twitter Sentiment Analysis is a project created by <a href="https://boblef.github.io/"
@@ -107,7 +114,7 @@
                     </li>
                 </ul>
                 <div
-                    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-top">
                     <h1 class="h2">How to use</h1>
                 </div>
                 <div class="intro_steps">
@@ -137,6 +144,7 @@
 
         // Display the start stream button.
         document.getElementById("start_stream").style.display = "inline";
+        document.getElementById("acceptance_criteria").style.display = "block";
 
         // Clear the input box with empty value.
         document.getElementById("get_tag").value = '';
@@ -187,6 +195,7 @@
         document.getElementById("end_stream").style.display = "inline";
         document.getElementById("reload").style.display = "inline";
         document.getElementById("start_stream").style.display = "none";
+        document.getElementById("acceptance_criteria").style.display = "none";
         document.getElementById("info").style.display = "none";
         document.getElementById("results").style.display = "inline";
 
@@ -198,11 +207,22 @@
         }
         console.log(tags);
 
+        // Get acceptance critaria for follower count threshold and user verification
+        var threshold = document.getElementById("fc_threshold").value;
+        var verification = document.querySelector('input[name="verification"]:checked').value;
+
+        var data = {
+            "tags": tags,
+            "threshold": threshold,
+            "verification": verification,
+        }
+        console.log(data);
+
         // Send the hashtags to Flask
         $.ajax({
             url: '/start_streaming',
             type: 'POST',
-            data: JSON.stringify(tags),   // converts js value to JSON string
+            data: JSON.stringify(data),   // converts js value to JSON string
             contentType: 'application/json',
             dataType: 'json',
         }).done(function (result) {     // on success get the return object from server
@@ -216,6 +236,7 @@
         // When uset click the end_streaming button
         // Displat the necessary tools
         document.getElementById("start_stream").style.display = "inline";
+        document.getElementById("acceptance_criteria").style.display = "block";
         document.getElementById("reload").style.display = "none";
         document.getElementById("end_stream").style.display = "none";
 
