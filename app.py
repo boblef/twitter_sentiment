@@ -3,6 +3,7 @@ from flask import (
 from lib.TwitterListener import TweetsListener
 from lib.Streaming import Streaming
 import configparser
+import ast
 import tweepy as tw
 import pandas as pd
 from pytorch_pretrained_bert.modeling import BertForSequenceClassification
@@ -61,12 +62,17 @@ def index():
 def start_streaming():
     if request.method == "POST":
         data = request.json
+        threshold = int(data["threshold"])
+        verification = ast.literal_eval(data["verification"])
+        listener.set_threshold(threshold)
+        listener.set_verification(verification)
 
         tags = listener.get_tags()
 
         # Check data is a new list of hashtags or has any update from previous.
         if tags is None or data != tags:
-            listener.set_tags(data)  # Set hashtags given by the user.
+            tags = data["tags"]
+            listener.set_tags(tags)  # Set hashtags given by the user.
             tags = listener.get_tags()  # Get preprocessed hashtags
         # Start streaming tweets based on the hashtags given.
         stream.start(keyword_list=tags,
