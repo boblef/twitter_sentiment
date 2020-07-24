@@ -15,6 +15,7 @@ class TweetsListener(StreamListener):
                             "followers_count", "logit",
                             "prediction", "sentiment_score"]
         self.model = model
+        self.tags = None
 
     def on_connect(self):
         """Called once connected to streaming server.
@@ -107,7 +108,8 @@ class TweetsListener(StreamListener):
         """
         Add more tags related to the given tags such as small letters of them
         """
-        lower_tags = [tag.lower() for tag in tags]
+        lower_tags = [tag.lower() for tag in tags
+                      if tag.lower() not in tags]
         tags += lower_tags
         return tags
 
