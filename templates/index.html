@@ -230,7 +230,7 @@
         })
 
         // Start auto reload the page
-        document.getElementById("reload_button").value = true;
+        document.getElementById("reload_button").value = "True";
         document.getElementById("reload_button").click();
 
     }
@@ -243,9 +243,6 @@
         document.getElementById("reload").style.display = "none";
         document.getElementById("end_stream").style.display = "none";
 
-        // Stop auto reload
-        document.getElementById("reload_button").value = false;
-
         $.ajax({
             url: '/end_streaming',
             type: 'POST',
@@ -253,6 +250,9 @@
             .done(function (result) {     // on success get the return object from server
                 console.log(result)     // do whatever with it. In this case see it in console
             })
+
+        // Stop auto reload
+        document.getElementById("reload_button").value = "False";
     }
 
     function init_func() {
