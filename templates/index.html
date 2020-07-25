@@ -71,7 +71,7 @@
             <button id="end_stream" class="form-control-dark" type="button" onclick="end_stream()">End
                 stream</button>
             <form action="/" method="POST" enctype="multipart/form-data" id="reload">
-                <input type="submit" value="Reload" id="reload_button">
+                <button name="reload_button" id="reload_button" type="submit" value="{{ auto_reload }}">Reload</button>
             </form>
             <div id="tag_menu">
                 <input id="tag_fix" class="form-control form-control-dark w-100" type="text" aria-label="Search">
@@ -132,8 +132,8 @@
     </div>
 </div>
 <script language="javascript" type="text/javascript">
-    var tag_counter = 0 // Define the number of tags added
-    var target_tag_id = 0 // Set default id that is being fixed or deleted
+    var tag_counter = 0; // Define the number of tags added
+    var target_tag_id = 0; // Set default id that is being fixed or deleted
     function tag() {
         ++tag_counter;
         var new_tag = document.getElementById("get_tag").value; // hashtag or username that will be searched on Twitter via API
@@ -229,7 +229,10 @@
             console.log(result)     // do whatever with it. In this case see it in console
         })
 
+        // Start auto reload the page
+        document.getElementById("reload_button").value = true;
         document.getElementById("reload_button").click();
+
     }
 
     function end_stream() {
@@ -239,6 +242,9 @@
         document.getElementById("acceptance_criteria").style.display = "block";
         document.getElementById("reload").style.display = "none";
         document.getElementById("end_stream").style.display = "none";
+
+        // Stop auto reload
+        document.getElementById("reload_button").value = false;
 
         $.ajax({
             url: '/end_streaming',
@@ -272,5 +278,15 @@
             document.getElementById("info").style.display = "inline";
         }
     }
+
+    // Simulate click function 
+    function clickButton() {
+        if ("{{ auto_reload }}" == "True") {
+            document.getElementById("reload_button").click();
+        }
+    }
+
+    // Simulate a click every 30 second 
+    setInterval(clickButton, 30000); 
 </script>
 {% endblock %}
