@@ -10,10 +10,9 @@ class TweetsListener(StreamListener):
     def __init__(self, export_csv_path, followers_threshold, model):
         self.export_csv_path = export_csv_path
         self.followers_threshold = followers_threshold
-        self.csv_headers = ["created_at", "text",
-                            "related_tags", "user_id",
-                            "followers_count", "logit",
-                            "prediction", "sentiment_score"]
+        self.csv_headers = ["created_at", "text", "related_tags", "logit",
+                            "prediction", "sentiment_score", "followers_count",
+                            "user_id"]
         self.model = model
         self.fc_threshold = 1000
         self.verification = True
