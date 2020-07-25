@@ -58,13 +58,20 @@
             <div class="container">
                 <div id="output_tags" class="d-flex flex-wrap align-items-center pt-3 pb-2 mb-3">
                 </div>
+                <div class="row" id="acceptance_criteria">
+                    Follower count threshold (a positive integer): <input type="text" value="1000"
+                        id="fc_threshold"><br>
+                    Only accept tweets of users who have varified their twitter account: <input type="radio"
+                        value="True" name="verification" checked><br>
+                    Accept tweets of all users:<input type="radio" value="False" name="verification"><br><br>
+                </div>
             </div>
             <button id="start_stream" class="form-control-dark" type="button" onclick="start_stream()">Start
                 stream</button>
             <button id="end_stream" class="form-control-dark" type="button" onclick="end_stream()">End
                 stream</button>
             <form action="/" method="POST" enctype="multipart/form-data" id="reload">
-                <input type="submit" value="Reload" id="reload_button">
+                <button name="reload_button" id="reload_button" type="submit" value="{{ auto_reload }}">Reload</button>
             </form>
             <div id="tag_menu">
                 <input id="tag_fix" class="form-control form-control-dark w-100" type="text" aria-label="Search">
@@ -84,12 +91,14 @@
             </div>
             <div id="info">
                 <div
-                    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-top">
                     <h1 class="h2">About this project</h1>
                 </div>
-                <p>Twitter Sentiment Analysis is a project created by <a href="https://boblef.github.io/">Kohei
+                <p>Twitter Sentiment Analysis is a project created by <a href="https://boblef.github.io/"
+                        target="_blank">Kohei
                         Suzuki</a>, and it streams tweets based on hashtags that you entered in the top menu bar.
-                    Then, by using <a href="https://github.com/ProsusAI/finBERT">FinBert</a>, FinBERT is a pre-trained
+                    Then, by using <a href="https://github.com/ProsusAI/finBERT" target="_blank">FinBert</a>, FinBERT is
+                    a pre-trained
                     NLP model to analyze sentiment of financial text, we give a sentiment score to each tweet.<br>
 
                     The functionalities being used in this project have potential to be applied to the Automated forex
@@ -105,7 +114,7 @@
                     </li>
                 </ul>
                 <div
-                    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-top">
                     <h1 class="h2">How to use</h1>
                 </div>
                 <div class="intro_steps">
@@ -123,8 +132,8 @@
     </div>
 </div>
 <script language="javascript" type="text/javascript">
-    var tag_counter = 0 // Define the number of tags added
-    var target_tag_id = 0 // Set default id that is being fixed or deleted
+    var tag_counter = 0; // Define the number of tags added
+    var target_tag_id = 0; // Set default id that is being fixed or deleted
     function tag() {
         ++tag_counter;
         var new_tag = document.getElementById("get_tag").value; // hashtag or username that will be searched on Twitter via API
@@ -135,6 +144,7 @@
 
         // Display the start stream button.
         document.getElementById("start_stream").style.display = "inline";
+        document.getElementById("acceptance_criteria").style.display = "block";
 
         // Clear the input box with empty value.
         document.getElementById("get_tag").value = '';
@@ -185,6 +195,7 @@
         document.getElementById("end_stream").style.display = "inline";
         document.getElementById("reload").style.display = "inline";
         document.getElementById("start_stream").style.display = "none";
+        document.getElementById("acceptance_criteria").style.display = "none";
         document.getElementById("info").style.display = "none";
         document.getElementById("results").style.display = "inline";
 
@@ -196,33 +207,42 @@
         }
         console.log(tags);
 
+        // Get acceptance critaria for follower count threshold and user verification
+        var threshold = document.getElementById("fc_threshold").value;
+        var verification = document.querySelector('input[name="verification"]:checked').value;
+
+        var data = {
+            "tags": tags,
+            "threshold": threshold,
+            "verification": verification,
+        }
+        console.log(data);
+
         // Send the hashtags to Flask
         $.ajax({
             url: '/start_streaming',
             type: 'POST',
-            data: JSON.stringify(tags),   // converts js value to JSON string
+            data: JSON.stringify(data),   // converts js value to JSON string
             contentType: 'application/json',
             dataType: 'json',
         }).done(function (result) {     // on success get the return object from server
             console.log(result)     // do whatever with it. In this case see it in console
         })
 
+        // Start auto reload the page
+        document.getElementById("reload_button").value = "True";
         document.getElementById("reload_button").click();
+
     }
 
     function end_stream() {
         // When uset click the end_streaming button
         // Displat the necessary tools
-        document.getElementById("start_stream").style.display = "none";
+        document.getElementById("start_stream").style.display = "inline";
+        document.getElementById("acceptance_criteria").style.display = "block";
         document.getElementById("reload").style.display = "none";
         document.getElementById("end_stream").style.display = "none";
 
-        // Remove the hashtags being displayed
-        let parent = document.getElementById('output_tags');
-        for (i = 1; i <= tag_counter; i++) {
-            let child = document.getElementById('tag_' + i);
-            parent.removeChild(child);
-        }
         $.ajax({
             url: '/end_streaming',
             type: 'POST',
@@ -230,6 +250,9 @@
             .done(function (result) {     // on success get the return object from server
                 console.log(result)     // do whatever with it. In this case see it in console
             })
+
+        // Stop auto reload
+        document.getElementById("reload_button").value = "False";
     }
 
     function init_func() {
@@ -255,5 +278,15 @@
             document.getElementById("info").style.display = "inline";
         }
     }
+
+    // Simulate click function 
+    function clickButton() {
+        if ("{{ auto_reload }}" == "True") {
+            document.getElementById("reload_button").click();
+        }
+    }
+
+    // Simulate a click every 30 second 
+    setInterval(clickButton, 30000); 
 </script>
 {% endblock %}

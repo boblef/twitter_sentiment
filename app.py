@@ -3,6 +3,7 @@ from flask import (
 from lib.TwitterListener import TweetsListener
 from lib.Streaming import Streaming
 import configparser
+import ast
 import tweepy as tw
 import pandas as pd
 from pytorch_pretrained_bert.modeling import BertForSequenceClassification
@@ -43,17 +44,22 @@ stream = Streaming(auth, listener)
 @ app.route('/', methods=["GET", "POST"])
 def index():
     if request.method == "POST":
+        auto_reload = request.form['reload_button']
+        auto_reload = True if auto_reload == "True" else False
         df = pd.read_csv(RESULT_CSV_PATH)
+        df = df.iloc[::-1]
         tags = listener.get_tags()  # Hashtags that user entered.
         return render_template('index.html',
                                tables=[df.to_html(classes='data table',
                                                   header="true")],
                                reload_status=True,
+                               auto_reload=auto_reload,
                                tags=tags)
     else:
         tags = {}  # Used to avoid a bug in JS.
         return render_template('index.html',
                                reload_status=False,
+                               auto_reload=False,
                                tags=tags)
 
 
@@ -61,8 +67,18 @@ def index():
 def start_streaming():
     if request.method == "POST":
         data = request.json
-        listener.set_tags(data)  # Set hashtags given by the user.
-        tags = listener.get_tags()  # Get preprocessed hashtags
+        threshold = int(data["threshold"])
+        verification = ast.literal_eval(data["verification"])
+        listener.set_threshold(threshold)
+        listener.set_verification(verification)
+
+        tags = listener.get_tags()
+
+        # Check data is a new list of hashtags or has any update from previous.
+        if tags is None or data != tags:
+            tags = data["tags"]
+            listener.set_tags(tags)  # Set hashtags given by the user.
+            tags = listener.get_tags()  # Get preprocessed hashtags
         # Start streaming tweets based on the hashtags given.
         stream.start(keyword_list=tags,
                      language_list=['en'],

@@ -10,11 +10,13 @@ class TweetsListener(StreamListener):
     def __init__(self, export_csv_path, followers_threshold, model):
         self.export_csv_path = export_csv_path
         self.followers_threshold = followers_threshold
-        self.csv_headers = ["created_at", "text",
-                            "related_tags", "user_id",
-                            "followers_count", "logit",
-                            "prediction", "sentiment_score"]
+        self.csv_headers = ["created_at", "text", "related_tags", "logit",
+                            "prediction", "sentiment_score", "followers_count",
+                            "user_id"]
         self.model = model
+        self.fc_threshold = 1000
+        self.verification = True
+        self.tags = None
 
     def on_connect(self):
         """Called once connected to streaming server.
@@ -44,10 +46,12 @@ class TweetsListener(StreamListener):
         followers_count = raw_data["user"]["followers_count"]
         user_verified = raw_data["user"]["verified"]
 
-        # Check we can trust the tweet
-        # by checking user verified and followers count
-        if user_verified and followers_count > self.followers_threshold:
+        if not self.verification:  # When user accept tweets of all users
+            user_verified = True
 
+            # Check we can trust the tweet
+            # by checking user verified and followers count
+        if user_verified and followers_count >= self.fc_threshold:
             # Try to get full text if there are more than 140 chars.
             try:
                 text = raw_data.extended_tweet["full_text"]
@@ -103,11 +107,18 @@ class TweetsListener(StreamListener):
     def set_tags(self, tags):
         self.tags = self.add_tags(tags)
 
+    def set_threshold(self, threshold):
+        self.fc_threshold = threshold
+
+    def set_verification(self, verification):
+        self.verification = verification
+
     def add_tags(self, tags):
         """
         Add more tags related to the given tags such as small letters of them
         """
-        lower_tags = [tag.lower() for tag in tags]
+        lower_tags = [tag.lower() for tag in tags
+                      if tag.lower() not in tags]
         tags += lower_tags
         return tags
 
