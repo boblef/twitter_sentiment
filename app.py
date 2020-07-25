@@ -45,8 +45,9 @@ stream = Streaming(auth, listener)
 def index():
     if request.method == "POST":
         auto_reload = request.form['reload_button']
-        auto_reload = True if auto_reload == "true" else False
+        auto_reload = True if auto_reload == "True" else False
         df = pd.read_csv(RESULT_CSV_PATH)
+        df = df.iloc[::-1]
         tags = listener.get_tags()  # Hashtags that user entered.
         return render_template('index.html',
                                tables=[df.to_html(classes='data table',
