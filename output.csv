@@ -1,1 +1,1 @@
-created_at,text,related_tags,user_id,followers_count
+created_at,text,related_tags,user_id,followers_count,logit,prediction,sentiment_score

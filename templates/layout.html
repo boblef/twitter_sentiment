@@ -17,6 +17,44 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
     <style>
+        html,
+        body {
+            height: 100%;
+        }
+
+        .fill-height {
+            min-height: 100%;
+            /* height: auto !important; */
+            /* cross-browser */
+            height: 100%;
+            /* cross-browser */
+        }
+
+        .container-fluid {
+            height: 100%;
+            overflow-y: hidden;
+            /* don't show content that exceeds my height */
+        }
+
+        .my-custom-scrollbar {
+            position: relative;
+            height: 600px;
+            overflow: auto;
+        }
+
+        .table-wrapper-scroll-y {
+            display: block;
+        }
+
+        .body-film {
+            min-height: 100%;
+            overflow-y: scroll;
+        }
+
+        .row {
+            height: 100%;
+        }
+
         .bd-placeholder-img {
             font-size: 1.125rem;
             text-anchor: middle;
@@ -34,7 +72,7 @@
 
         .tags {
             background-color: aqua;
-            margin-right: 5%;
+            margin-right: 2%;
         }
 
         #start_stream,
@@ -64,8 +102,8 @@
         }
 
         .data th {
-            background-color: #77dd77;
-            color: white;
+            background-color: aqua;
+            color: black;
         }
 
         tr:nth-child(odd) {
