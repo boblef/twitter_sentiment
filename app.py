@@ -23,8 +23,6 @@ FINBERT_MODEL_PATH = "model/sentiment/finbert"
 
 # CSV files
 EXPORT_CSV_PATH = "output.csv"  # Where we store tweets collected
-# CSV where we store result with predicted scores.
-RESULT_CSV_PATH = "output.csv"
 
 # Number of followers that we will use to verify if a tweet is trustable.
 FOLLOWERS_THRESHOLD = 1000
@@ -46,7 +44,7 @@ def index():
     if request.method == "POST":
         auto_reload = request.form['reload_button']
         auto_reload = True if auto_reload == "True" else False
-        df = pd.read_csv(RESULT_CSV_PATH)
+        df = pd.read_csv(EXPORT_CSV_PATH)
         df = df.iloc[::-1]
         tags = listener.get_tags()  # Hashtags that user entered.
         return render_template('index.html',
