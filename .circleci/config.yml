@@ -9,9 +9,6 @@ jobs:
       - run:
           name: Install necessary libraries
           command: "pip3 install pytorch-pretrained-bert nltk pandas numpy Flask flask-cors tweepy"
-      - run:
-          name: "Unit Test"
-          command: "python -m unittest"
       - store_test_results:
           path: test_reports
       - store_artifacts:
