@@ -68,7 +68,7 @@ We can see the results of the tweets collected containing the hashtags or keywor
   python app.py
   ```
 
-## Futher Work
+## Further Work
 
 - Some of the functionality used in this application can also be used in the Automated Forex Trading Strategy which I have been working on in order to create new features.
 - We change the Deep Learning model which gives sentiment scores to tweets to another NLP model which trained on different dataset, if we want to switch the domain we want to use for.
