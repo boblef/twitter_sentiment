@@ -1,6 +1,6 @@
-[![CircleCI](https://circleci.com/gh/boblef/twitter_sentimental.svg?style=svg)](https://app.circleci.com/pipelines/github/boblef/twitter_sentimental)
+[![CircleCI](https://circleci.com/gh/boblef/twitter_sentiment.svg?style=svg)](https://app.circleci.com/pipelines/github/boblef/twitter_sentiment)
 
-## Sentimental Analysis on Tweets
+## Sentiment Analysis on Tweets
 
 A Flask application where we can enter hashtags and keywords related to tweets we want to stream and in which an NLP model, <strong>FinBERT</strong> which is a pre-trained NLP model to analyze the sentiment of the financial text, does <strong>sentiment analysis</strong> on the tweets in real-time.
 We can see the results of the tweets collected containing the hashtags or keywords and their sentiment scores given by FinBERT via Pandas dataFrame.
@@ -9,7 +9,7 @@ We can see the results of the tweets collected containing the hashtags or keywor
 
 1. Clone this repository to your local.
    ```
-   git clone https://github.com/boblef/twitter_sentimental.git
+   git clone https://github.com/boblef/twitter_sentiment.git
    ```
 2. Create a Twitter developer account
    In order to run the Flask application, we need to create a [Twitter developer account](https://developer.twitter.com/en/apply-for-access).
@@ -70,7 +70,7 @@ We can see the results of the tweets collected containing the hashtags or keywor
 
 ## Futher Work
 
-- Some of the functionalities used in this application can also be used in the Automated Forex Trading Strategy which I have been working on in order to create new features.
+- Some of the functionality used in this application can also be used in the Automated Forex Trading Strategy which I have been working on in order to create new features.
 - We change the Deep Learning model which gives sentiment scores to tweets to another NLP model which trained on different dataset, if we want to switch the domain we want to use for.
 
 ## Reference
