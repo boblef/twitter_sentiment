@@ -119,11 +119,109 @@
                 </div>
                 <div class="intro_steps">
                     <ol>
-                        <li>Enter hashtags that you want to stream on as many as you want. E.x. USA, Japan, JPY, USD...
+                        <li>Enter hashtags that you want to stream on. (e.x. $TSLA, $APPL, #USD, #CAD, #USDJPY...)
                         </li>
-                        You can easily modify and remove a tag by clicking the tag.
+                        * You can easily modify and remove a tag by clicking the tag when the streaming is not
+                        running.<br>
+                        * Here are track examples:<br>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <tr>
+                                    <td>
+                                        <p>Parameter value</p>
+                                    </td>
+                                    <td>
+                                        <p>Will match...</p>
+                                    </td>
+                                    <td>
+                                        <p>Will not match...</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Twitter
+                                    </td>
+                                    <td>
+                                        TWITTERtwitter “Twitter” twitter. #twitter @twitter http://twitter.com
+                                    </td>
+                                    <td>
+                                        TwitterTracker#newtwitter
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Twitter’s
+                                    </td>
+                                    <td>
+                                        I like Twitter’s new design
+                                    </td>
+                                    <td>
+                                        Someday I’d like to visit @Twitter’s office
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        twitter api,twitter streaming
+                                    </td>
+                                    <td>
+                                        The Twitter API is awesomeThe twitter streaming service is fast Twitter has a
+                                        streaming API
+                                    </td>
+                                    <td>
+                                        I’m new to Twitter
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        example.com
+                                    </td>
+                                    <td>
+                                        Someday I will visit example.com
+                                    </td>
+                                    <td>
+                                        There is no example.com/foobarbaz
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        example.com/foobarbaz
+                                    </td>
+                                    <td>
+                                        example.com/foobarbazwww.example.com/foobarbaz
+                                    </td>
+                                    <td>
+                                        example.com
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        www.example.com/foobarbaz
+                                    </td>
+                                    <td>
+                                    </td>
+                                    <td>
+                                        www.example.com/foobarbaz
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        example com
+                                    </td>
+                                    <td>
+                                        example.comwww.example.com foo.example.com foo.example.com/bar I hope my startup
+                                        isn’t merely another example of a dot com boom!
+                                    </td>
+                                    <td>
+                                    </td>
+                                </tr>
+                            </table>
+                            For more details, please visit <a
+                                href="https://developer.twitter.com/en/docs/tweets/filter-realtime/guides/basic-stream-parameters">the
+                                track section</a>.
+                        </div>
                         <li>Once you have typed hashtags, click the "Start stream" button.</li>
-                        <li>You need to refresh the page to get recent tweets by clicking the "Refresh".</li>
+                        <li>The page is automatically reloaded every 15 secounds, but you can also refresh the page to
+                            get recent tweets by clicking the "Refresh".</li>
                         <li>When you want to finish the stream, please click the "End stream".</li>
                     </ol>
                 </div>
@@ -286,7 +384,7 @@
         }
     }
 
-    // Simulate a click every 30 second 
-    setInterval(clickButton, 30000); 
+    // Simulate a click every 15 second 
+    setInterval(clickButton, 15000); 
 </script>
 {% endblock %}
