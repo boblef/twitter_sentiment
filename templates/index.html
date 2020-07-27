@@ -219,7 +219,8 @@
                                 track section</a>.
                         </div>
                         <li>Once you have typed hashtags, click the "Start stream" button.</li>
-                        <li>You need to refresh the page to get recent tweets by clicking the "Refresh".</li>
+                        <li>The page is automatically reloaded every 15 secounds, but you can also refresh the page to
+                            get recent tweets by clicking the "Refresh".</li>
                         <li>When you want to finish the stream, please click the "End stream".</li>
                     </ol>
                 </div>
@@ -382,7 +383,7 @@
         }
     }
 
-    // Simulate a click every 30 second 
-    setInterval(clickButton, 30000); 
+    // Simulate a click every 15 second 
+    setInterval(clickButton, 15000); 
 </script>
 {% endblock %}
