@@ -1,0 +1,20 @@
+---
+orbs:
+  python: circleci/python@0.2.1
+jobs:
+  run_test:
+    executor: python/default
+    steps:
+      - checkout
+      - run:
+          name: Install necessary libraries
+          command: "pip3 install pytorch-pretrained-bert nltk pandas numpy Flask flask-cors tweepy"
+      - store_test_results:
+          path: test_reports
+      - store_artifacts:
+          path: test_reports
+version: 2.1
+workflows:
+  main:
+    jobs:
+      - run_test
