@@ -11,10 +11,10 @@ We can see the results of the tweets collected containing the hashtags or keywor
    ```
    git clone https://github.com/boblef/twitter_sentiment.git
    ```
-2. Create a Twitter developer account
+2. Create a Twitter developer account<br>
    In order to run the Flask application, we need to create a [Twitter developer account](https://developer.twitter.com/en/apply-for-access).
    <br>
-3. Set up the cinfig file
+3. Set up the cinfig file<br>
    Once you have created a developer account, the next thing you need to do is to set up the config file.
    Copy `twitter.txt` and put it into the `config` folder with the information you need to set up.
    <strong>What you need is as follows:</strong>
@@ -36,7 +36,7 @@ We can see the results of the tweets collected containing the hashtags or keywor
    ![Twitter_config](/images/twitter_config.png)
    <br>
 
-4. Set up the environment, and run the application
+4. Set up the environment, and run the application<br>
    You can set up the environment in which we run the Flask application either by using Docker or by creating a conda or pip env by yourself.
 
 - Docker
