@@ -89,7 +89,7 @@ QtPy==1.9.0
 regex @ file:///opt/concourse/worker/volumes/live/5c3450d5-f152-477e-507e-094a7be51d80/volume/regex_1593435586246/work
 requests==2.24.0
 requests-oauthlib==1.3.0
-rsa==4.6
+rsa==4.7
 s3transfer==0.3.3
 scikit-learn==0.21.2
 scipy==1.4.1
