@@ -36,7 +36,7 @@ itsdangerous==1.1.0
 jedi @ file:///opt/concourse/worker/volumes/live/114a62c0-dd60-4a40-6382-85abb31b5f6e/volume/jedi_1592841953086/work
 Jinja2==2.11.2
 jmespath==0.10.0
-joblib==0.13.2
+joblib==1.2.0
 jsonschema==3.2.0
 jupyter==1.0.0
 jupyter-client @ file:///tmp/build/80754af9/jupyter_client_1594163838128/work
